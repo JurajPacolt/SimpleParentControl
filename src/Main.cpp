@@ -322,7 +322,7 @@ void UninstallService()
 #endif // _WIN32
 
 
-// Entry method.
+// Entry point.
 int main(int argv, char *args[])
 {
     char path[MAX_PATH+1];
@@ -426,7 +426,10 @@ int main(int argv, char *args[])
         }
         InstallService();
     } else if (mapParams.find("uninstall") != mapParams.end()) {
-        //defaultServiceName = mapParams["name"];
+        if (mapParams.find("name") != mapParams.end()) {
+            wstring ws = wstring(mapParams["name"].begin(), mapParams["name"].end());
+            defaultServiceName = LPWSTR(ws.c_str());
+        }
         UninstallService();
     }
     #endif // _WIN32
