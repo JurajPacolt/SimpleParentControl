@@ -82,7 +82,8 @@ void CheckInterval()
 
         int howLongTime = mapConditions[now->tm_wday];
 
-        char date[10];
+        char date[11];
+        memset(date, 0, sizeof(char)*11);
         sprintf(date, "%02d.%02d.%04d", now->tm_mday, (now->tm_mon + 1), (now->tm_year + 1900) );
         string sNow(date);
 
@@ -446,7 +447,8 @@ int main(int argv, char *args[])
             cout << "Date: " << rec->date << endl;
             cout << "How long per day [seconds]: " << rec->howLongForDay << endl;
             cout << "How long per day [minutes]: " << (rec->howLongForDay / 60) << endl;
-            cout << "Last verification in seconds: " << rec->lastVerify << endl;
+            std::time_t t = rec->lastVerify;
+            cout << "Last verification: " << ctime(&t) << endl;
         } else {
             cout << "Could not open data file." << endl;
         }

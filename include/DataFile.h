@@ -23,7 +23,7 @@ class DataFile
         DataFile();
         virtual ~DataFile();
         bool IsDataFileExists();
-        const char *GetDataFile();
+        const string GetDataFile();
         struct Record {
             string date;
             int howLongForDay;

@@ -13,7 +13,7 @@ void DataFile::SetRecord(DataFile::Record *record)
 
     try
     {
-        f.open(GetDataFile());
+        f.open(GetDataFile().c_str());
 
         ostringstream ss;
         ss << record->date;
@@ -38,7 +38,7 @@ bool DataFile::GetRecord(DataFile::Record* rec)
 {
     ifstream f;
 
-    f.open(GetDataFile());
+    f.open(GetDataFile().c_str());
 
     if (!f.fail() && f.is_open())
     {
@@ -50,7 +50,8 @@ bool DataFile::GetRecord(DataFile::Record* rec)
 
         try
         {
-            char *cDate = new char[10];
+            char *cDate = new char[11];
+            memset(cDate, 0, sizeof(char)*11);
             int iHowLongPerDay;
             long lLastVerify;
             sscanf(s.c_str(), "%s %d %ld", cDate, &iHowLongPerDay, &lLastVerify);
@@ -78,17 +79,18 @@ bool DataFile::GetRecord(DataFile::Record* rec)
 bool DataFile::IsDataFileExists()
 {
     ifstream f;
-    f.open(GetDataFile());
+    f.open(GetDataFile().c_str());
     bool ret = f.good();
     f.close();
     return ret;
 }
 
 
-const char *DataFile::GetDataFile()
+const string DataFile::GetDataFile()
 {
     #if defined(_WIN32)
-    TCHAR szPath[MAX_PATH];
+    TCHAR szPath[MAX_PATH + 1];
+    memset(szPath, 0, sizeof(TCHAR)*(MAX_PATH + 1));
     if ( !SUCCEEDED( SHGetFolderPath( NULL, CSIDL_COMMON_APPDATA, NULL, 0, szPath ) ) ) {
         cerr << "Could not obtain common application data folder." << endl;
         exit(1);
@@ -99,7 +101,7 @@ const char *DataFile::GetDataFile()
     #endif
     string ret = homeDir + PATH_SEPARATOR + ".parent_control_data";
 
-    return ret.c_str();
+    return ret;
 }
 
 
